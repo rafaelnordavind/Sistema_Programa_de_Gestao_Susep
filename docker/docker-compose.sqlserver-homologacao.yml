@@ -3,10 +3,10 @@ version: "3.8"
 services:
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
-    user: "${UID}:${GID}"
     environment:
       SA_PASSWORD: "P1ssw@rd"
       ACCEPT_EULA: "Y"
+      TZ: "America/Sao_Paulo"
     command: /bin/bash /scripts/start-sql-server.sh
     volumes:
       - ../install/1. Criação da estrutura do banco de dados - Obrigatorio.sql:/scripts/1.estrutura_dados.sql:ro
@@ -15,16 +15,14 @@ services:
       - ../install/4. Alteracoes da estrutura do BD para a V7.sql:/scripts/4.atualizacao_versao_1_7.sql:ro
       - ../install/5. Inserir dados de teste - Opcional.sql:/scripts/5.dados_teste.sql:ro
       - ./start-sql-server.sh:/scripts/start-sql-server.sh:ro
-      - ./volume/mssql:/var/opt/mssql:rw
+      # Criando um volume docker para persistencia dos dados do banco (armazenado em /var/lib/docker/volumes/)
+      - mssql2019_pgd-1.7:/var/opt/mssql:rw
     ports:
       - 1433:1433
-    labels:
-      - traefik.enable=false
     networks:
-      - pgd
+      - pgd-interno
 
 networks:
-  pgd:
-    external: true
-    name: pgd
-
+  pgd-interno:
+volumes:
+  mssql2019_pgd-1.7:
