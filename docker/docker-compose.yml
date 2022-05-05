@@ -10,6 +10,8 @@ services:
       - web-api
       - api-gateway
       - web-app
+    environment:
+      - TZ=America/Sao_Paulo
     volumes:
       - ../config/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
         #- /path/to/certificate/.pem:/path/to/certificate/.pem:ro
@@ -38,6 +40,7 @@ services:
       - ../log/api:/app/api/Logs:rw
     environment: 
       - ASPNETCORE_ENVIRONMENT=Homolog
+      - TZ=America/Sao_Paulo
 
       # Configurações de banco de dados
       - ConnectionStrings__DefaultConnection=Server=db,1433;Database=programa_gestao;User Id=sa;Password=P1ssw@rd;
@@ -86,6 +89,7 @@ services:
       - ../log/gateway:/app/gateway/Logs:rw
     environment: 
       - ASPNETCORE_ENVIRONMENT=Homolog
+      - TZ=America/Sao_Paulo
     networks:
       - pgd
       - pgd-interno
@@ -97,6 +101,8 @@ services:
     image: ghcr.io/srmourasilva/sistema_programa_de_gestao_susep/sgd:latest
     # Imagem caso você queira testar na sua máquina
     #image: susep
+    environment:
+      - TZ=America/Sao_Paulo
     command: dotnet Susep.SISRH.WebApp.dll
     working_dir: /app/app/
     volumes:
